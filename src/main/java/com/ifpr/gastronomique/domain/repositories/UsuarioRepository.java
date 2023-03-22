@@ -1,9 +1,13 @@
 package com.ifpr.gastronomique.domain.repositories;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import com.ifpr.gastronomique.domain.models.Usuario;
+import com.ifpr.gastronomique.domain.models.UsuarioModel;
 
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-
+@Repository
+public interface UsuarioRepository extends JpaRepository<UsuarioModel, Long> {
+	Optional<UsuarioModel> findByUsername(String username);
 }
