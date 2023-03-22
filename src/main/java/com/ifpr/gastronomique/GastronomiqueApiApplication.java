@@ -9,7 +9,7 @@ public class GastronomiqueApiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(GastronomiqueApiApplication.class, args);
-		System.out.println(new BCryptPasswordEncoder().encode("senha123"));
+		System.out.println("User: admin, Senha: " + new BCryptPasswordEncoder().encode("admin"));
 	}
 
 }

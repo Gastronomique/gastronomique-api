@@ -61,8 +61,6 @@ public class UsuarioModel implements UserDetails, Serializable {
 	@Column(nullable = false)
 	private String password;
 	
-	private boolean situacao;
-	
 	@ManyToMany
 	@JoinTable(name = "TB_USERS_ROLES",
 			joinColumns = @JoinColumn(name = "user_id"),

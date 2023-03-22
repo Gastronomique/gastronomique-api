@@ -1,4 +1,4 @@
-package com.ifpr.gastronomique.api.controller;
+package com.ifpr.gastronomique.api.controllers;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
