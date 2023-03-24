@@ -26,7 +26,7 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioService service;
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
 	@GetMapping
 	public List<UsuarioModel> findAll() {
 		return service.listarTodosUsuarios();

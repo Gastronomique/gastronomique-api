@@ -12,7 +12,7 @@ public class TesteController {
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
 	@GetMapping
 	public String hello() {
-		return "Hello World!";
+		return "Hello World!".toUpperCase();
 	}
 	
 }

@@ -47,25 +47,18 @@ public class UsuarioService {
 		//Setar a senha criptografada do usuário
 		usuario.setPassword(senhaCriptografada);
 		
-		//Se o usuário for do tipo PROFESSOR deve ser atríbuida a regra ROLE_PROFESSOR
+		var role = new RoleModel();
 		if(usuario.getTipoUsuario().equals(TipoUsuarioEnum.PROFESSOR)) {
-			var role = new RoleModel();
 			role.setRoleId(2L);
 			role.setRoleName(RoleName.ROLE_PROFESSOR);
-			List<RoleModel> roles = new ArrayList<>();
-			roles.add(role);
-			usuario.setRoles(roles);
-		}
-		
-		//Se o usuário for do tipo ADMINISTRADOR deve ser atríbuida a regra ROLE_ADMIN
-		if(usuario.getTipoUsuario().equals(TipoUsuarioEnum.ADMINISTRADOR)) {
-			var role = new RoleModel();
+		} else if(usuario.getTipoUsuario().equals(TipoUsuarioEnum.ADMINISTRADOR)) {
 			role.setRoleId(1L);
 			role.setRoleName(RoleName.ROLE_ADMIN);
-			List<RoleModel> roles = new ArrayList<>();
-			roles.add(role);
-			usuario.setRoles(roles);
 		}
+		
+		List<RoleModel> roles = new ArrayList<>();
+		roles.add(role);
+		usuario.setRoles(roles);
 		
 		return repository.save(usuario);
 	}
