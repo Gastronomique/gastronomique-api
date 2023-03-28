@@ -32,7 +32,7 @@ import com.ifpr.gastronomique.security.repositories.RoleRepository;
 import com.ifpr.gastronomique.security.repositories.UserRepository;
 import com.ifpr.gastronomique.security.services.UserDetailsImpl;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -110,5 +110,10 @@ public class AuthController {
 		userRepository.save(user);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+	}
+	
+	@PostMapping("/signout")
+	public ResponseEntity<?> signOutUser() {
+	    return ResponseEntity.ok(new MessageResponse("User signed out successfully!"));
 	}
 }

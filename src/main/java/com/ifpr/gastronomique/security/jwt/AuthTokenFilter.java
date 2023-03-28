@@ -14,7 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.ifpr.gastronomique.security.services.UserDetailsServiceImpl;
@@ -38,7 +37,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
 				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-						userDetails, null, userDetails.getAuthorities());
+						userDetails, userDetails.getPassword(), userDetails.getAuthorities());
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
 				SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -50,6 +49,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 	}
 
+	/*
 	private String parseJwt(HttpServletRequest request) {
 		String headerAuth = request.getHeader("Authorization");
 
@@ -59,4 +59,11 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
 		return null;
 	}
+	*/
+	
+	private String parseJwt(HttpServletRequest request) 	{
+	    String header = request.getHeader("Authorization");
+	    return (header != null && header.startsWith("Bearer ")) ? header.substring(7) : null;
+	}
+
 }
