@@ -30,6 +30,12 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@NotBlank
+	@Size(min = 2, max = 100)
+	private String fullName;
+	
+	private boolean isActive;
 
 	@NotBlank
 	@Size(max = 20)
@@ -54,7 +60,9 @@ public class User {
 	public User() {
 	}
 
-	public User(String username, String email, String password) {
+	public User(String fullName, boolean isActive, String username, String email, String password) {
+		this.fullName = fullName;
+		this.isActive = isActive;
 		this.username = username;
 		this.email = email;
 		this.password = password;
