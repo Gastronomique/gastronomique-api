@@ -29,6 +29,7 @@ public class Insumo {
 	@Enumerated(EnumType.STRING)
 	private UnidadeDeMedidaEnum unidadeDeMedida;
 	
+	//Perguntar ao professor referente a capacidade deste campo...
 	private String descricao;
 	
 	@Enumerated(EnumType.STRING)

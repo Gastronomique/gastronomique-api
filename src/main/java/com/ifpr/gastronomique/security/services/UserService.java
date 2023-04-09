@@ -2,6 +2,7 @@ package com.ifpr.gastronomique.security.services;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -48,10 +49,12 @@ public class UserService {
 	@Transactional
 	public ResponseEntity<?> loginUsuario(LoginRequest loginRequest) {
 		
-		//Verificando se o usuário está ATIVO
-		boolean estaAtivo = repository.findByUsername(loginRequest.getUsername()).map(usuario -> usuario.isActive()).orElse(null);
-		if(!estaAtivo) {
-			return ResponseEntity.badRequest().body(new MessageResponse("O seu usuário esta INATIVO, contate o ADMINISTRADOR!"));
+		Optional<User> user = repository.findByUsername(loginRequest.getUsername());
+		
+		if(user.isPresent()) {
+			if(!user.get().isActive()) {
+				return ResponseEntity.badRequest().body(new MessageResponse("O seu usuário esta INATIVO, contate o ADMINISTRADOR!"));
+			}
 		}
 		
 		Authentication authentication = authenticationManager.authenticate(
