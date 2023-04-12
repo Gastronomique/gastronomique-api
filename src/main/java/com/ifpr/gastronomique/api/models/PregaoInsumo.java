@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,6 +26,7 @@ public class PregaoInsumo {
 	
 	@ManyToOne
 	@JoinColumn(name = "pregao_id", referencedColumnName = "id", nullable = false)
+	@JsonBackReference
 	private Pregao pregao;
 
 	@ManyToOne
