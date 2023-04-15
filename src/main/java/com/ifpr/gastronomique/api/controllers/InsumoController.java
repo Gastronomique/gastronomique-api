@@ -2,6 +2,8 @@ package com.ifpr.gastronomique.api.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,12 +38,12 @@ public class InsumoController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Insumo> inserirInsumo(@RequestBody Insumo insumo) {
+	public ResponseEntity<Insumo> inserirInsumo(@Valid @RequestBody Insumo insumo) {
 		return service.inserirInsumo(insumo);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Insumo> alterarInsumo(@PathVariable Long id,@RequestBody Insumo insumo) {
+	public ResponseEntity<Insumo> alterarInsumo(@PathVariable Long id, @Valid @RequestBody Insumo insumo) {
 		return service.alterarInsumo(id, insumo);
 	}
 	

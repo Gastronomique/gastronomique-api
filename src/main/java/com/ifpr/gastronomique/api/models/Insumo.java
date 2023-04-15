@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.ifpr.gastronomique.api.enums.TipoInsumoEnum;
 import com.ifpr.gastronomique.api.enums.UnidadeDeMedidaEnum;
@@ -23,15 +24,17 @@ public class Insumo {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank
+	@NotBlank(message = "O campo DENOMINAÇÃO é obrigatório!")
 	private String denominacao;
 	
+	@NotNull(message = "O campo UNIDADE DE MEDIDA é obrigatório!")
 	@Enumerated(EnumType.STRING)
 	private UnidadeDeMedidaEnum unidadeDeMedida;
 	
 	//Perguntar ao professor referente a capacidade deste campo...
 	private String descricao;
 	
+	@NotNull(message = "O campo TIPO INSUMO é obrigatório!")
 	@Enumerated(EnumType.STRING)
 	private TipoInsumoEnum tipoInsumo;
 	
