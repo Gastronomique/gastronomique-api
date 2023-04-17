@@ -16,39 +16,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ifpr.gastronomique.api.models.Disciplina;
-import com.ifpr.gastronomique.api.services.DisciplinaService;
+import com.ifpr.gastronomique.api.models.Curso;
+import com.ifpr.gastronomique.api.services.CursoService;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @RestController
-@RequestMapping("/disciplinas")
-public class DisciplinaController {
+@RequestMapping("/cursos")
+public class CursoController {
 	
 	@Autowired
-	private DisciplinaService service;
+	private CursoService service;
 	
 	@GetMapping
-	public List<Disciplina> buscarTodos() {
-		return service.listarTodasDisciplinas();
+	public List<Curso> buscarTodos() {
+		return service.listarTodosCursos();
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Disciplina> buscarPorId(@PathVariable Long id) {
-		return service.buscarDisciplinaPorId(id);
+	public ResponseEntity<Curso> buscarPorId(@PathVariable Long id) {
+		return service.buscarCursoPorId(id);
 	}
 	
-	@PostMapping("/{cursoId}")
-	public ResponseEntity<Disciplina> inserirDisciplina(@Valid @RequestBody Disciplina disciplina, @PathVariable Long cursoId) {
-		return service.inserirDisciplina(disciplina.getNome(), cursoId);
+	@PostMapping
+	public ResponseEntity<Curso> inserirCurso(@Valid @RequestBody Curso curso) {
+		return service.inserirCurso(curso);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Disciplina> alterarDisciplina(@PathVariable Long id, @Valid @RequestBody Disciplina disciplina) {
-		return service.alterarDisciplina(id, disciplina);
+	public ResponseEntity<Curso> alterarCurso(@PathVariable Long id, @Valid @RequestBody Curso curso) {
+		return service.alterarCurso(id, curso);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Disciplina> excluirDisciplinaPorId(@PathVariable Long id) {
-		return service.excluirDisciplinaPorId(id);
+	public ResponseEntity<Curso> excluirCursoPorId(@PathVariable Long id) {
+		return service.excluirCursoPorId(id);
 	}
 }

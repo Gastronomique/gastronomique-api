@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.ifpr.gastronomique.api.models.Curso;
 import com.ifpr.gastronomique.api.models.Disciplina;
+import com.ifpr.gastronomique.api.repositories.CursoRepository;
 import com.ifpr.gastronomique.api.repositories.DisciplinaRepository;
 
 @Service
@@ -16,6 +18,9 @@ public class DisciplinaService {
 	
 	@Autowired
 	private DisciplinaRepository repository;
+	
+	@Autowired
+	private CursoRepository cursoRepository;
 	
 	public List<Disciplina> listarTodasDisciplinas() {
 		return repository.findAll();
@@ -29,7 +34,11 @@ public class DisciplinaService {
 		return new ResponseEntity<Disciplina>(HttpStatus.NOT_FOUND);
 	}
 	
-	public ResponseEntity<Disciplina> inserirDisciplina(Disciplina disciplina) {
+	public ResponseEntity<Disciplina> inserirDisciplina(String nomeDisciplina, Long cursoId) {
+		Optional<Curso> curso = cursoRepository.findById(cursoId);
+		Disciplina disciplina = new Disciplina();
+		disciplina.setNome(nomeDisciplina);
+		disciplina.setCurso(curso.get());
 		repository.save(disciplina);
 		return new ResponseEntity<Disciplina>(disciplina, HttpStatus.CREATED);
 	}

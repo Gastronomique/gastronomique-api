@@ -9,6 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +30,7 @@ public class Disciplina {
 	
 	@ManyToOne
 	@JoinColumn(name = "curso_id", referencedColumnName = "id", nullable = false)
+	@JsonBackReference
 	private Curso curso;
 	
 }
