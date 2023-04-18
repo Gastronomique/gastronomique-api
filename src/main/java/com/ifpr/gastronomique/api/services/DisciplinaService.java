@@ -3,6 +3,7 @@ package com.ifpr.gastronomique.api.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,13 @@ public class DisciplinaService {
 	
 	public ResponseEntity<Disciplina> inserirDisciplina(String nomeDisciplina, Long cursoId) {
 		Optional<Curso> curso = cursoRepository.findById(cursoId);
+		
+		if(!curso.isPresent()) {
+			throw new ObjectNotFoundException(cursoId, "Curso");
+		}
+		
 		Disciplina disciplina = new Disciplina();
+		
 		disciplina.setNome(nomeDisciplina);
 		disciplina.setCurso(curso.get());
 		repository.save(disciplina);

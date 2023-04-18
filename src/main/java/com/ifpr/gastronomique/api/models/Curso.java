@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,6 +28,7 @@ public class Curso {
 	private String nome;
 	
 	@OneToMany(mappedBy = "curso", fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<Disciplina> listaDisciplinas;
 	
 }
