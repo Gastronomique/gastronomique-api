@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ifpr.gastronomique.api.DisciplinaDto;
 import com.ifpr.gastronomique.api.models.Disciplina;
 import com.ifpr.gastronomique.api.services.DisciplinaService;
 
@@ -30,6 +31,11 @@ public class DisciplinaController {
 	@GetMapping
 	public List<Disciplina> buscarTodos() {
 		return service.listarTodasDisciplinas();
+	}
+	
+	@GetMapping("curso/{cursoId}")
+	public List<DisciplinaDto> listarDisciplinasPorCursoId(@PathVariable Long cursoId) {
+		return service.listarDisciplinasPorCursoId(cursoId);
 	}
 	
 	@GetMapping("/{id}")

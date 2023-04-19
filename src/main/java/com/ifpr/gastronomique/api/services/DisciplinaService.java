@@ -2,6 +2,7 @@ package com.ifpr.gastronomique.api.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.ifpr.gastronomique.api.DisciplinaDto;
 import com.ifpr.gastronomique.api.models.Curso;
 import com.ifpr.gastronomique.api.models.Disciplina;
 import com.ifpr.gastronomique.api.repositories.CursoRepository;
@@ -25,6 +27,16 @@ public class DisciplinaService {
 	
 	public List<Disciplina> listarTodasDisciplinas() {
 		return repository.findAll();
+	}
+	
+	public List<DisciplinaDto> listarDisciplinasPorCursoId(Long cursoId) {
+		List<Disciplina> disciplinas = repository.findByCursoId(cursoId);
+		return disciplinas.stream().map(d -> {
+			DisciplinaDto dto = new DisciplinaDto();
+			dto.setId(d.getId());
+			dto.setNome(d.getNome());
+			return dto;
+		}).collect(Collectors.toList());
 	}
 	
 	public ResponseEntity<Disciplina> buscarDisciplinaPorId(Long id) {
