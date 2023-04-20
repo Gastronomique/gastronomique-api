@@ -43,7 +43,7 @@ public class DisciplinaController {
 		return service.buscarDisciplinaPorId(id);
 	}
 	
-	@PostMapping("/{cursoId}")
+	@PostMapping("curso/{cursoId}")
 	public ResponseEntity<Disciplina> inserirDisciplina(@Valid @RequestBody Disciplina disciplina, @PathVariable Long cursoId) {
 		return service.inserirDisciplina(disciplina.getNome(), cursoId);
 	}
