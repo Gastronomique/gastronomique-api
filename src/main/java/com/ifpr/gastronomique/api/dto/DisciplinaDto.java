@@ -1,4 +1,4 @@
-package com.ifpr.gastronomique.api;
+package com.ifpr.gastronomique.api.dto;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.ifpr.gastronomique.api.DisciplinaDto;
+import com.ifpr.gastronomique.api.dto.DisciplinaDto;
 import com.ifpr.gastronomique.api.models.Curso;
 import com.ifpr.gastronomique.api.models.Disciplina;
 import com.ifpr.gastronomique.api.repositories.CursoRepository;

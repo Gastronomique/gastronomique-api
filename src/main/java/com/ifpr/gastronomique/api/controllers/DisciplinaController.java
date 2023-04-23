@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ifpr.gastronomique.api.DisciplinaDto;
+import com.ifpr.gastronomique.api.dto.DisciplinaDto;
 import com.ifpr.gastronomique.api.models.Disciplina;
 import com.ifpr.gastronomique.api.services.DisciplinaService;
 
