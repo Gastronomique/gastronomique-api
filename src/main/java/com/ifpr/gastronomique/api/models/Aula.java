@@ -23,6 +23,8 @@ public class Aula {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	private String descricao;
+	
 	@ManyToOne
 	@JoinColumn(name = "usuario_id", referencedColumnName = "id", nullable = false)
 	private User usuario;
