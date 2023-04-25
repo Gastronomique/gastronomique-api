@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,18 +59,28 @@ public class AulaService {
 	}
 	
 	 public ResponseEntity<AulaDto> inserirAula(Aula aula) {
-		 Optional<User> usuario = usuarioRepository.findById(aula.getUsuario().getId());
-		 Optional<Disciplina> disciplina = disciplinaRepository.findById(aula.getDisciplina().getId());
-		 Optional<Laboratorio> laboratorio = laboratorioRepository.findById(aula.getLaboratorio().getId());
+		
+		 User usuario = usuarioRepository.findById(aula.getUsuario().getId()).orElseThrow(
+				 () -> new ObjectNotFoundException(aula.getUsuario().getId(), "User"));
+		 
+		Disciplina disciplina = disciplinaRepository.findById(aula.getDisciplina().getId()).orElseThrow(
+				 () -> new ObjectNotFoundException(aula.getDisciplina().getId(), "Disciplina"));
+		 
+		 Laboratorio laboratorio = laboratorioRepository.findById(aula.getLaboratorio().getId()).orElseThrow(
+				 () -> new ObjectNotFoundException(aula.getLaboratorio().getId(), "Laboratorio"));
+		 	 
+		 
 		 AulaDto aulaDto = new AulaDto();
+		 aulaRepository.save(aula);
+		 
 		 aulaDto.setId(aula.getId());
 		 aulaDto.setDescricao(aula.getDescricao());
 		 aulaDto.setDataUtilizacao(aula.getDataUtilizacao());
 		 aulaDto.setValor(aula.getValor());
-		 aulaDto.setNomeDisciplina(disciplina.get().getNome());
-		 aulaDto.setNomeLaboratorio(laboratorio.get().getNome());
-		 aulaDto.setNomeUsuario(usuario.get().getFullName());
-		 aulaRepository.save(aula);
+		 aulaDto.setNomeDisciplina(disciplina.getNome());
+		 aulaDto.setNomeLaboratorio(laboratorio.getNome());
+		 aulaDto.setNomeUsuario(usuario.getFullName());
+		 
 		 return new ResponseEntity<AulaDto>(aulaDto, HttpStatus.CREATED);
 	 }
 	 
