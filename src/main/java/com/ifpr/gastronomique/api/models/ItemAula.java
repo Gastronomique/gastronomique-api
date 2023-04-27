@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,6 +23,7 @@ public class ItemAula {
 	
 	@ManyToOne
 	@JoinColumn(name = "aula_id", referencedColumnName = "id", nullable = false)
+	@JsonBackReference
 	private Aula aula;
 	
 	@ManyToOne
@@ -30,4 +33,6 @@ public class ItemAula {
 	private Double quantidade;
 	
 	private String observacao;
+	
+	private Double valor;
 }

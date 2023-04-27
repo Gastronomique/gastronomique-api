@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,5 +34,6 @@ public class Pregao {
 	private String nome;
 	
 	@OneToMany(mappedBy = "pregao", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private List<PregaoInsumo> pregaoInsumo; 
 }
