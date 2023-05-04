@@ -33,6 +33,11 @@ public class AulaController {
 		return aulaService.listarTodasAulas();
 	}
 	
+	@GetMapping("/usuario/{idUsuario}")
+	public List<AulaDto> listarAulasPorUsuario(@PathVariable Long idUsuario) {
+		return aulaService.listarAulasPorUsuario(idUsuario);
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<Aula> buscarAulaPorId(@PathVariable Long id) {
 		return aulaService.buscarAulaPorId(id);

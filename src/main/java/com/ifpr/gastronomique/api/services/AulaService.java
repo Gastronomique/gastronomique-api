@@ -50,6 +50,23 @@ public class AulaService {
 		}).collect(Collectors.toList());
 	}
 	
+	public List<AulaDto> listarAulasPorUsuario(Long idUsuaro) {
+		User usuario = new User();
+		usuario.setId(idUsuaro);
+		List<Aula> aulas = aulaRepository.findByUsuario(usuario);
+		return aulas.stream().map( a -> {
+			AulaDto aulaDto = new AulaDto();
+			aulaDto.setId(a.getId());
+			aulaDto.setDescricao(a.getDescricao());
+			aulaDto.setDataUtilizacao(a.getDataUtilizacao());
+			aulaDto.setValor(a.getValor());
+			aulaDto.setNomeDisciplina(a.getDisciplina().getNome());
+			aulaDto.setNomeLaboratorio(a.getLaboratorio().getNome());
+			aulaDto.setNomeUsuario(a.getUsuario().getFullName());
+			return aulaDto;
+		}).collect(Collectors.toList());
+	}
+	
 	public ResponseEntity<Aula> buscarAulaPorId(Long aulaId) {
 		Aula aula = aulaRepository.findById(aulaId).orElse(null);
 		if(aula != null) {
