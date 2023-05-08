@@ -26,12 +26,12 @@ public class Pregao {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank
+	private String nome;
+	
 	private LocalDate dataInicio;
 	
 	private LocalDate dataFinal;
-	
-	@NotBlank
-	private String nome;
 	
 	@OneToMany(mappedBy = "pregao", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonManagedReference
