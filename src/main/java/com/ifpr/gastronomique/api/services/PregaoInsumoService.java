@@ -3,13 +3,16 @@ package com.ifpr.gastronomique.api.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.ifpr.gastronomique.api.models.Insumo;
 import com.ifpr.gastronomique.api.models.Pregao;
 import com.ifpr.gastronomique.api.models.PregaoInsumo;
+import com.ifpr.gastronomique.api.repositories.InsumoRepository;
 import com.ifpr.gastronomique.api.repositories.PregaoInsumoRepository;
 
 @Service
@@ -17,6 +20,9 @@ public class PregaoInsumoService {
 	
 	@Autowired
 	private PregaoInsumoRepository repository;
+	
+	@Autowired
+	private InsumoRepository insumoRepository;
 	
 	public List<PregaoInsumo> listarInsumosDoPregao(Long idPregao) {
 		var pregao = new Pregao();
@@ -56,5 +62,14 @@ public class PregaoInsumoService {
 		} else {
 			return ResponseEntity.notFound().build();
 		}	
+	}
+	
+	public ResponseEntity<PregaoInsumo> listarUltimoPregaoInsumo(Long idInsumo) {
+		Insumo insumo = insumoRepository.findById(idInsumo).orElseThrow(() -> new ObjectNotFoundException(idInsumo, "Insumo"));
+		List<PregaoInsumo> pregoesInsumo = repository.findByInsumoOrderByPregaoDesc(insumo);
+		if(pregoesInsumo.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		return new ResponseEntity<PregaoInsumo>(pregoesInsumo.get(0), HttpStatus.OK);
 	}
 }

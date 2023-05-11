@@ -32,6 +32,11 @@ public class PregaoInsumoController {
 		return pregaoInsumoService.listarInsumosDoPregao(idPregao);
 	}
 	
+	@GetMapping("/ocorrencia/{idInsumo}")
+	public ResponseEntity<PregaoInsumo> listarUltimoPreco(@PathVariable Long idInsumo) {
+		return pregaoInsumoService.listarUltimoPregaoInsumo(idInsumo);
+	} 
+	
 	@PostMapping
 	public ResponseEntity<PregaoInsumo> inserirInsumoNoPregao(@Valid @RequestBody PregaoInsumo pregaoInsumo) {
 		return pregaoInsumoService.inserirPregaoInsumo(pregaoInsumo);
