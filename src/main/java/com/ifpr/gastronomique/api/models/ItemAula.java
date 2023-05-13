@@ -34,5 +34,7 @@ public class ItemAula {
 	
 	private String observacao;
 	
-	private Double valor;
+	private Double valorUnitario;
+	
+	private Double valorTotal;
 }
