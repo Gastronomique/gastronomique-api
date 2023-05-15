@@ -14,9 +14,11 @@ import com.ifpr.gastronomique.api.dto.AulaDto;
 import com.ifpr.gastronomique.api.models.Aula;
 import com.ifpr.gastronomique.api.models.Disciplina;
 import com.ifpr.gastronomique.api.models.Laboratorio;
+import com.ifpr.gastronomique.api.models.Pregao;
 import com.ifpr.gastronomique.api.repositories.AulaRepository;
 import com.ifpr.gastronomique.api.repositories.DisciplinaRepository;
 import com.ifpr.gastronomique.api.repositories.LaboratorioRepository;
+import com.ifpr.gastronomique.api.repositories.PregaoRepository;
 import com.ifpr.gastronomique.security.models.User;
 import com.ifpr.gastronomique.security.repositories.UserRepository;
 
@@ -35,12 +37,16 @@ public class AulaService {
 	@Autowired 
 	private LaboratorioRepository laboratorioRepository;
 	
+	@Autowired
+	private PregaoRepository pregaoRepository;
+	
 	public List<AulaDto> listarTodasAulas() {
 		List<Aula> aulas = aulaRepository.findAll();
 		return aulas.stream().map( a -> {
 			AulaDto aulaDto = new AulaDto();
 			aulaDto.setId(a.getId());
 			aulaDto.setDescricao(a.getDescricao());
+			aulaDto.setNomePregao(a.getPregao().getNome());
 			aulaDto.setDataUtilizacao(a.getDataUtilizacao());
 			aulaDto.setValor(a.getValor());
 			aulaDto.setNomeDisciplina(a.getDisciplina().getNome());
@@ -58,6 +64,7 @@ public class AulaService {
 			AulaDto aulaDto = new AulaDto();
 			aulaDto.setId(a.getId());
 			aulaDto.setDescricao(a.getDescricao());
+			aulaDto.setNomePregao(a.getPregao().getNome());
 			aulaDto.setDataUtilizacao(a.getDataUtilizacao());
 			aulaDto.setValor(a.getValor());
 			aulaDto.setNomeDisciplina(a.getDisciplina().getNome());
@@ -85,6 +92,9 @@ public class AulaService {
 		 
 		 Laboratorio laboratorio = laboratorioRepository.findById(aula.getLaboratorio().getId()).orElseThrow(
 				 () -> new ObjectNotFoundException(aula.getLaboratorio().getId(), "Laboratorio"));
+		 
+		 Pregao pregao = pregaoRepository.findById(aula.getPregao().getId()).orElseThrow(
+				 () -> new ObjectNotFoundException(aula.getLaboratorio().getId(), "Pregao"));
 		 	 
 		 
 		 AulaDto aulaDto = new AulaDto();
@@ -92,6 +102,7 @@ public class AulaService {
 		 
 		 aulaDto.setId(aula.getId());
 		 aulaDto.setDescricao(aula.getDescricao());
+		 aulaDto.setNomePregao(pregao.getNome());
 		 aulaDto.setDataUtilizacao(aula.getDataUtilizacao());
 		 aulaDto.setValor(aula.getValor());
 		 aulaDto.setNomeDisciplina(disciplina.getNome());

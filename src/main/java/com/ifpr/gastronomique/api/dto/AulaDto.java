@@ -10,6 +10,7 @@ import lombok.Setter;
 public class AulaDto {
 	private Long id;
 	private String descricao;
+	private String nomePregao;
 	private String nomeUsuario;
 	private String nomeDisciplina;
 	private String nomeLaboratorio;

@@ -7,5 +7,5 @@ import com.ifpr.gastronomique.api.models.Insumo;
 
 @Repository
 public interface InsumoRepository extends JpaRepository<Insumo, Long> {
-
+	
 }
