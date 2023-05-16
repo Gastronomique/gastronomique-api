@@ -54,4 +54,8 @@ public class Aula {
 	
 	private Double valor;
 	
+	public Aula() {
+		this.valor = 0.0;
+	}
+	
 }
