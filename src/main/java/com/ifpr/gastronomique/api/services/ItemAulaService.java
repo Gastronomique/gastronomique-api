@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.ifpr.gastronomique.api.enums.TipoInsumoEnum;
 import com.ifpr.gastronomique.api.models.Aula;
 import com.ifpr.gastronomique.api.models.ItemAula;
 import com.ifpr.gastronomique.api.repositories.AulaRepository;
@@ -46,6 +47,10 @@ public class ItemAulaService {
 		
 		Optional<Aula> aula = aulaRepository.findById(itemAula.getAula().getId());
 		if(aula.isPresent()) {
+			if(itemAula.getInsumo().getTipoInsumo().equals(TipoInsumoEnum.PRODUCAO)) {
+				aula.get().setValor(0.0);
+				repository.save(itemAula);
+			}
 			Double valorAula = aula.get().getValor() + itemAula.getValorTotal();
 			aula.get().setValor(valorAula);
 			aulaService.alterarAula(itemAula.getAula().getId(), aula.get());
