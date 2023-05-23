@@ -32,6 +32,16 @@ public class InsumoController {
 		return service.listarTodosInsumos();
 	}
 	
+	@GetMapping("pregao/{idPregao}")
+	public List<Insumo> buscarInsumosPorPregao(@PathVariable Long idPregao) {
+		return service.buscarInsumosPorPregao(idPregao);
+	}
+	
+	@GetMapping("tipo/{tipo}")
+	public List<Insumo> buscarPorTipo(@PathVariable String tipo) {
+		return service.buscarInsumosPorTipo(tipo);
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<Insumo> buscarPorId(@PathVariable Long id) {
 		return service.buscarInsumoPorId(id);
