@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.ifpr.gastronomique.api.enums.StatusAulaEnum;
 import com.ifpr.gastronomique.security.models.User;
 
 import lombok.Getter;
@@ -53,6 +56,9 @@ public class Aula {
 	private List<ItemAula> itensAula;
 	
 	private Double valor;
+	
+	@Enumerated(EnumType.STRING)
+	private StatusAulaEnum status;
 	
 	public Aula() {
 		this.valor = 0.0;

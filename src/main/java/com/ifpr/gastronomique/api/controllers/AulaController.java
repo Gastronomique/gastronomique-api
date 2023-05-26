@@ -54,6 +54,11 @@ public class AulaController {
 		return aulaService.alterarAula(id, aula);
 	}
 	
+	@PutMapping("/enviar/{id}")
+	public ResponseEntity<Aula> enviarAula(@PathVariable Long id) {
+		return aulaService.enviarAula(id);
+	}
+	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Aula> excluirAulaPorId(@PathVariable Long id) {
 		return aulaService.excluirAulaPorId(id);

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ifpr.gastronomique.api.dto.AulaDto;
+import com.ifpr.gastronomique.api.enums.StatusAulaEnum;
 import com.ifpr.gastronomique.api.models.Aula;
 import com.ifpr.gastronomique.api.models.Disciplina;
 import com.ifpr.gastronomique.api.models.Laboratorio;
@@ -52,6 +53,7 @@ public class AulaService {
 			aulaDto.setNomeDisciplina(a.getDisciplina().getNome());
 			aulaDto.setNomeLaboratorio(a.getLaboratorio().getNome());
 			aulaDto.setNomeUsuario(a.getUsuario().getFullName());
+			aulaDto.setStatus(a.getStatus().toString());
 			return aulaDto;
 		}).collect(Collectors.toList());
 	}
@@ -70,6 +72,7 @@ public class AulaService {
 			aulaDto.setNomeDisciplina(a.getDisciplina().getNome());
 			aulaDto.setNomeLaboratorio(a.getLaboratorio().getNome());
 			aulaDto.setNomeUsuario(a.getUsuario().getFullName());
+			aulaDto.setStatus(a.getStatus().toString());
 			return aulaDto;
 		}).collect(Collectors.toList());
 	}
@@ -95,11 +98,13 @@ public class AulaService {
 		 
 		 Pregao pregao = pregaoRepository.findById(aula.getPregao().getId()).orElseThrow(
 				 () -> new ObjectNotFoundException(aula.getLaboratorio().getId(), "Pregao"));
-		 	 
 		 
-		 AulaDto aulaDto = new AulaDto();
+		 aula.setStatus(StatusAulaEnum.EDICAO);
+		 	 
+		 // SALVA A AULA
 		 aulaRepository.save(aula);
 		 
+		 AulaDto aulaDto = new AulaDto();
 		 aulaDto.setId(aula.getId());
 		 aulaDto.setDescricao(aula.getDescricao());
 		 aulaDto.setNomePregao(pregao.getNome());
@@ -108,7 +113,9 @@ public class AulaService {
 		 aulaDto.setNomeDisciplina(disciplina.getNome());
 		 aulaDto.setNomeLaboratorio(laboratorio.getNome());
 		 aulaDto.setNomeUsuario(usuario.getFullName());
+		 aulaDto.setStatus(aula.getStatus().toString());
 		 
+		 // RETORNA DTO
 		 return new ResponseEntity<AulaDto>(aulaDto, HttpStatus.CREATED);
 	 }
 	 
@@ -121,6 +128,16 @@ public class AulaService {
 		return new ResponseEntity<Aula>(aula, HttpStatus.NOT_FOUND);
 	 }
 	 
+	 public ResponseEntity<Aula> enviarAula(Long id) {
+			Aula aula = aulaRepository.findById(id).orElse(null);
+			if(aula != null) {
+				aula.setStatus(StatusAulaEnum.REVISAO);
+				aulaRepository.save(aula);
+				return new ResponseEntity<Aula>(aula, HttpStatus.OK);
+			}	
+			return new ResponseEntity<Aula>(aula, HttpStatus.NOT_FOUND);
+	 }
+		  
 	 public ResponseEntity<Aula> excluirAulaPorId(Long id) {
 		Optional<Aula> aula = aulaRepository.findById(id);
 		if(aula.isPresent()) {
@@ -130,4 +147,5 @@ public class AulaService {
 			return ResponseEntity.notFound().build();
 		}	
 	 }
+	 
 }

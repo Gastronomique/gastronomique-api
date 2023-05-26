@@ -16,4 +16,5 @@ public class AulaDto {
 	private String nomeLaboratorio;
 	private LocalDate dataUtilizacao;
 	private Double valor;
+	private String status;
 }
