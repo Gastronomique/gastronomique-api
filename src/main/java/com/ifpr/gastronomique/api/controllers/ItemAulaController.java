@@ -27,6 +27,11 @@ public class ItemAulaController {
 	@Autowired
 	private ItemAulaService itemAulaService;
 	
+	@GetMapping("/buscar/{itemAulaId}")
+	public ResponseEntity<ItemAula> buscarItemAulaPorId(@PathVariable Long itemAulaId) {
+		return itemAulaService.buscarItemAulaPorId(itemAulaId);
+	}
+	
 	@GetMapping("/{idAula}")
 	public List<ItemAula> listarItensDaAula(@PathVariable Long idAula) {
 		return itemAulaService.listarItensDaAula(idAula);

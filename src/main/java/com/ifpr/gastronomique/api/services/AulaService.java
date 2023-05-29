@@ -124,7 +124,7 @@ public class AulaService {
 		if(aula != null) {
 			aulaRepository.save(aulaAlterada);
 			return new ResponseEntity<Aula>(aula, HttpStatus.OK);
-		}	
+		}
 		return new ResponseEntity<Aula>(aula, HttpStatus.NOT_FOUND);
 	 }
 	 

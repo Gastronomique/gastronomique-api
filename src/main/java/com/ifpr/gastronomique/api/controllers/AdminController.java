@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ifpr.gastronomique.api.models.Aula;
 import com.ifpr.gastronomique.api.repositories.AdminRepository;
 import com.ifpr.gastronomique.api.services.AdminService;
 import com.ifpr.gastronomique.security.models.User;
@@ -44,5 +45,10 @@ public class AdminController {
 	@PutMapping("tornar/administrador/{userId}")
 	public ResponseEntity<User> tornarUsuarioAdmin(@PathVariable Long userId) {
 		return adminService.tornarUsuarioAdmin(userId);
+	}
+	
+	@PutMapping("/aula/aprovar/{id}")
+	public ResponseEntity<Aula> aprovarAula(@PathVariable Long id) {
+		return adminService.aprovarAula(id);
 	}
 }

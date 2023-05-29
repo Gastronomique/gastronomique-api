@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.ifpr.gastronomique.api.enums.StatusAulaEnum;
+import com.ifpr.gastronomique.api.models.Aula;
+import com.ifpr.gastronomique.api.repositories.AulaRepository;
 import com.ifpr.gastronomique.security.models.ERole;
 import com.ifpr.gastronomique.security.models.Role;
 import com.ifpr.gastronomique.security.models.User;
@@ -23,6 +26,9 @@ public class AdminService {
 	
 	@Autowired
 	private RoleRepository roleRepository;
+	
+	@Autowired
+	private AulaRepository aulaRepository;
 	
 	public ResponseEntity<User> ativarUsuario(Long userId) {
 		var usuario = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException(userId, "User"));
@@ -52,4 +58,14 @@ public class AdminService {
 		return new ResponseEntity<User>(usuario, HttpStatus.OK);
 	}
 	
+	public ResponseEntity<Aula> aprovarAula(Long id) {
+		Aula aula = aulaRepository.findById(id).orElse(null);
+		if(aula != null) {
+			aula.setStatus(StatusAulaEnum.APROVADA);
+			aulaRepository.save(aula);
+			return new ResponseEntity<Aula>(aula, HttpStatus.OK);
+		}	
+		return new ResponseEntity<Aula>(aula, HttpStatus.NOT_FOUND);
+ }
+
 }
