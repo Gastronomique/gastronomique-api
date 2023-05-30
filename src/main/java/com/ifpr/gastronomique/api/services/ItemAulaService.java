@@ -8,9 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.ifpr.gastronomique.api.dto.ItemAulaDto;
 import com.ifpr.gastronomique.api.models.Aula;
+import com.ifpr.gastronomique.api.models.Insumo;
 import com.ifpr.gastronomique.api.models.ItemAula;
 import com.ifpr.gastronomique.api.repositories.AulaRepository;
+import com.ifpr.gastronomique.api.repositories.InsumoRepository;
 import com.ifpr.gastronomique.api.repositories.ItemAulaRepository;
 
 @Service
@@ -22,6 +25,9 @@ public class ItemAulaService {
 	private AulaRepository aulaRepository;
 	
 	@Autowired
+	private InsumoRepository insumoRepository;
+	
+	@Autowired
 	private AulaService aulaService;
 	
 	public List<ItemAula> listarItensDaAula(Long idAula) {
@@ -30,12 +36,20 @@ public class ItemAulaService {
 		return repository.findByAula(aula);
 	}
 	
-	public ResponseEntity<ItemAula> buscarItemAulaPorId(Long itemAulaId) {
+	public ResponseEntity<ItemAulaDto> buscarItemAulaPorId(Long itemAulaId) {
 		ItemAula itemAula = repository.findById(itemAulaId).orElse(null);
 		if(itemAula != null) {
-			return new ResponseEntity<ItemAula>(itemAula, HttpStatus.OK);
+			ItemAulaDto itemAulaDto = new ItemAulaDto();
+			itemAulaDto.setId(itemAulaId);
+			itemAulaDto.setIdAula(itemAula.getAula().getId());
+			itemAulaDto.setIdInsumo(itemAula.getInsumo().getId());
+			itemAulaDto.setObservacao(itemAula.getObservacao());
+			itemAulaDto.setQuantidade(itemAula.getQuantidade());
+			itemAulaDto.setValorUnitario(itemAula.getValorUnitario());
+			
+			return new ResponseEntity<ItemAulaDto>(itemAulaDto, HttpStatus.OK);
 		}
-		return new ResponseEntity<ItemAula>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<ItemAulaDto>(HttpStatus.NOT_FOUND);
 	}
 	
 	public ResponseEntity<ItemAula> inserirItemAula(ItemAula itemAula) {
@@ -55,18 +69,24 @@ public class ItemAulaService {
 		return new ResponseEntity<ItemAula>(itemAula, HttpStatus.CREATED);
 	}
 	
-	public ResponseEntity<ItemAula> alterarItemAula(Long id, ItemAula itemAulaAlterado) {
+	public ResponseEntity<ItemAula> alterarItemAula(Long id, ItemAulaDto itemAulaDto) {
 		ItemAula itemAula = repository.findById(id).orElse(null);
 		
 		if(itemAula != null) {
-			itemAula.setQuantidade(itemAulaAlterado.getQuantidade());
-			
+			itemAula.setId(itemAulaDto.getId());
+			Insumo insumo = insumoRepository.findById(itemAulaDto.getIdInsumo()).orElse(null);
+			itemAula.setInsumo(insumo);
+			itemAula.setQuantidade(itemAulaDto.getQuantidade());
+			itemAula.setObservacao(itemAulaDto.getObservacao());
+			Optional<Aula> aula = aulaRepository.findById(itemAulaDto.getIdAula());
+			if(aula.isPresent()) {
+				aula.get().setValor(0.0);
+				aulaService.alterarAula(id, aula.get());
+			}
 			repository.save(itemAula);
 			return new ResponseEntity<ItemAula>(itemAula, HttpStatus.OK);
 		}
-		
-		return new ResponseEntity<ItemAula>(itemAula, HttpStatus.NOT_FOUND);
-		
+		return new ResponseEntity<ItemAula>(itemAula, HttpStatus.NOT_FOUND);	
 	}
 	
 	public ResponseEntity<ItemAula> excluirItemAulaPorId(Long id) {

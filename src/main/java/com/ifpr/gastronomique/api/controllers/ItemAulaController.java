@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ifpr.gastronomique.api.dto.ItemAulaDto;
 import com.ifpr.gastronomique.api.models.ItemAula;
 import com.ifpr.gastronomique.api.services.ItemAulaService;
 
@@ -28,7 +29,7 @@ public class ItemAulaController {
 	private ItemAulaService itemAulaService;
 	
 	@GetMapping("/buscar/{itemAulaId}")
-	public ResponseEntity<ItemAula> buscarItemAulaPorId(@PathVariable Long itemAulaId) {
+	public ResponseEntity<ItemAulaDto> buscarItemAulaPorId(@PathVariable Long itemAulaId) {
 		return itemAulaService.buscarItemAulaPorId(itemAulaId);
 	}
 	
@@ -43,7 +44,7 @@ public class ItemAulaController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<ItemAula> alterarItemAula(@PathVariable Long id, @Valid @RequestBody ItemAula itemAula) {
+	public ResponseEntity<ItemAula> alterarItemAula(@PathVariable Long id, @Valid @RequestBody ItemAulaDto itemAula) {
 		return itemAulaService.alterarItemAula(id, itemAula);
 	}
 	
