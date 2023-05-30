@@ -44,7 +44,6 @@ public class ItemAulaController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<ItemAula> alterarItemAula(@PathVariable Long id, @Valid @RequestBody ItemAula itemAula) {
-		itemAula.setId(id);
 		return itemAulaService.alterarItemAula(id, itemAula);
 	}
 	

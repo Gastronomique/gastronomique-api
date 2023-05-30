@@ -56,9 +56,11 @@ public class ItemAulaService {
 	}
 	
 	public ResponseEntity<ItemAula> alterarItemAula(Long id, ItemAula itemAulaAlterado) {
-		ItemAula itemAula = repository.findById(itemAulaAlterado.getId()).orElse(null);
+		ItemAula itemAula = repository.findById(id).orElse(null);
 		
 		if(itemAula != null) {
+			itemAula.setQuantidade(itemAulaAlterado.getQuantidade());
+			
 			repository.save(itemAula);
 			return new ResponseEntity<ItemAula>(itemAula, HttpStatus.OK);
 		}
