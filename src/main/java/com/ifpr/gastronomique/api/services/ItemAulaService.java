@@ -78,11 +78,21 @@ public class ItemAulaService {
 			itemAula.setInsumo(insumo);
 			itemAula.setQuantidade(itemAulaDto.getQuantidade());
 			itemAula.setObservacao(itemAulaDto.getObservacao());
-			Optional<Aula> aula = aulaRepository.findById(itemAulaDto.getIdAula());
+			
+			Optional<Aula> aula = aulaRepository.findById(itemAula.getAula().getId());
 			if(aula.isPresent()) {
-				aula.get().setValor(0.0);
-				aulaService.alterarAula(id, aula.get());
+				// RETIRADO O VALOR TOTAL DO ITEM DA AULA NO MOMENTO DA EDICAO
+				Double valorAula = aula.get().getValor() - itemAula.getValorTotal();
+				
+				// ATRIBUINDO NOVO VALOR TOTAL AO ITEM APOS AS EDICOES
+				Double valorTotalItem = itemAula.getValorUnitario() * itemAula.getQuantidade();
+				itemAula.setValorTotal(valorTotalItem);
+				
+				// ATUALIZANDO VALORES DA AULA APOS EDICAO DO ITEM
+				aula.get().setValor(valorAula + valorTotalItem);
+				aulaService.alterarAula(aula.get().getId(), aula.get());
 			}
+			
 			repository.save(itemAula);
 			return new ResponseEntity<ItemAula>(itemAula, HttpStatus.OK);
 		}
