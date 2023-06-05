@@ -1,10 +1,12 @@
 package com.ifpr.gastronomique.api.controllers;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,6 +38,14 @@ public class AulaController {
 	@GetMapping("/usuario/{idUsuario}")
 	public List<AulaDto> listarAulasPorUsuario(@PathVariable Long idUsuario) {
 		return aulaService.listarAulasPorUsuario(idUsuario);
+	}
+	
+	@GetMapping("{dataInicial}/{dataFinal}")
+	public List<Aula> listarAulasPorPeriodo(
+			@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate dataInicial,
+			@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataFinal
+			) {
+		return aulaService.listarAulasPorPeriodo(dataInicial, dataFinal);
 	}
 	
 	@GetMapping("/{id}")

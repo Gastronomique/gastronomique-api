@@ -1,5 +1,7 @@
 package com.ifpr.gastronomique.api.services;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -75,6 +77,18 @@ public class AulaService {
 			aulaDto.setStatus(a.getStatus().toString());
 			return aulaDto;
 		}).collect(Collectors.toList());
+	}
+	
+	public List<Aula> listarAulasPorPeriodo(LocalDate dataInicial, LocalDate dataFinal) {
+		List<Aula> aulasPorPeriodo = aulaRepository.buscarPorPeriodo(dataInicial, dataFinal);
+		List<Aula> aulasPorPeriodoAprovadas = new ArrayList<>();
+		for(Aula a : aulasPorPeriodo) {
+			if(a.getStatus().equals(StatusAulaEnum.APROVADA)) {
+				aulasPorPeriodoAprovadas.add(a);
+			}  
+		}
+		System.out.println("TAMANHO DA LISTA: " + aulasPorPeriodoAprovadas.size());
+		return aulasPorPeriodoAprovadas;
 	}
 	
 	public ResponseEntity<Aula> buscarAulaPorId(Long aulaId) {

@@ -24,7 +24,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
+@Entity(name = "aula")
 public class Aula {
 	
 	@Id
