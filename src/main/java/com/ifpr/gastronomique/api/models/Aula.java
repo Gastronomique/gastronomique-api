@@ -49,6 +49,10 @@ public class Aula {
 	@JoinColumn(name = "pregao_id", referencedColumnName = "id", nullable = false)
 	private Pregao pregao;
 	
+	@ManyToOne
+	@JoinColumn(name = "lista_de_compra_id", referencedColumnName = "id", nullable = true)
+	private ListaDeCompra listaDeCompra;
+	
 	private LocalDate dataUtilizacao;
 	
 	@OneToMany(mappedBy = "aula", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
