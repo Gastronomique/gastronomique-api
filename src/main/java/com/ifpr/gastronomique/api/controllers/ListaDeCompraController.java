@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ifpr.gastronomique.api.models.ItemAula;
 import com.ifpr.gastronomique.api.models.ListaDeCompra;
 import com.ifpr.gastronomique.api.services.ListaDeCompraService;
 
@@ -28,8 +29,8 @@ public class ListaDeCompraController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ListaDeCompra> salvarListaDeCompra(@RequestBody ListaDeCompra lista) {
+	public ResponseEntity<ListaDeCompra> salvarListaDeCompra(@RequestBody List<ItemAula> listaDeAulas) {
 		System.out.println("SALVOU UMA NOVA LISTA DE COMPRA...");
-		return service.salvarListaDeCompra(lista);
+		return service.salvarListaDeCompra(listaDeAulas);
 	}
 }

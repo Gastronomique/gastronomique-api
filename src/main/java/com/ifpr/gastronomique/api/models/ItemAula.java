@@ -37,4 +37,11 @@ public class ItemAula {
 	private Double valorUnitario;
 	
 	private Double valorTotal;
+
+	@Override
+	public String toString() {
+		return "ItemAula [id=" + id + ", aula=" + aula + ", insumo=" + insumo + ", quantidade=" + quantidade
+				+ ", observacao=" + observacao + ", valorUnitario=" + valorUnitario + ", valorTotal=" + valorTotal
+				+ "]";
+	}	
 }
