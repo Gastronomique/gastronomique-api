@@ -1,6 +1,7 @@
 package com.ifpr.gastronomique.api.models;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -30,4 +31,11 @@ public class ListaDeCompra {
 	@OneToMany(mappedBy = "listaDeCompra", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<ItemListaDeCompra> itensDaListaDeCompra;
+	
+	public void addItensDaListaDeCompra(ItemListaDeCompra item) {		
+		if(itensDaListaDeCompra == null) {
+			itensDaListaDeCompra = new ArrayList<>();
+		}
+		itensDaListaDeCompra.add(item);
+	}
 }
