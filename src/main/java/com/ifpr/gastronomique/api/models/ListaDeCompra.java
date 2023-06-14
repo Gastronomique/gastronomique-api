@@ -38,4 +38,13 @@ public class ListaDeCompra {
 		}
 		itensDaListaDeCompra.add(item);
 	}
+	
+	public boolean existeNaListaDeCompra(ItemListaDeCompra item) {
+		for(ItemListaDeCompra itemListaDeCompra: itensDaListaDeCompra) {
+			if(item.getInsumo().getId() == itemListaDeCompra.getInsumo().getId()) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
