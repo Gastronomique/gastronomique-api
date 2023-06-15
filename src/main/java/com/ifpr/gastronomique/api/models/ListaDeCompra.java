@@ -39,12 +39,14 @@ public class ListaDeCompra {
 		itensDaListaDeCompra.add(item);
 	}
 	
-	public boolean existeNaListaDeCompra(ItemListaDeCompra item) {
-		for(ItemListaDeCompra itemListaDeCompra: itensDaListaDeCompra) {
-			if(item.getInsumo().getId() == itemListaDeCompra.getInsumo().getId()) {
-				return true;
+	public ItemListaDeCompra existeInsumoNaListaDeCompra(Long idIsumo) {
+		if(itensDaListaDeCompra != null) {
+			for(ItemListaDeCompra itemListaDeCompra: itensDaListaDeCompra) {
+				if(idIsumo == itemListaDeCompra.getInsumo().getId()) {
+					return itemListaDeCompra;
+				}
 			}
 		}
-		return false;
+		return null;
 	}
 }

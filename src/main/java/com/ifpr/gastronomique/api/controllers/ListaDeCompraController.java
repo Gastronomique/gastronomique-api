@@ -28,7 +28,7 @@ public class ListaDeCompraController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ListaDeCompra> salvarListaDeCompra(@RequestBody List<Long> listaDeAulasId) {
+	public ResponseEntity<?> salvarListaDeCompra(@RequestBody List<Long> listaDeAulasId) {
 		System.out.println("SALVOU UMA NOVA LISTA DE COMPRA...");
 		return service.salvarListaDeCompra(listaDeAulasId);
 	}
