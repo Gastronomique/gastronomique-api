@@ -48,6 +48,11 @@ public class AulaController {
 		return aulaService.listarAulasPorPeriodo(dataInicial, dataFinal);
 	}
 	
+	@GetMapping("revisao")
+	public List<AulaDto> listarAulasEmRevisao() {
+		return aulaService.listarAulasEmRevisao();
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<Aula> buscarAulaPorId(@PathVariable Long id) {
 		return aulaService.buscarAulaPorId(id);

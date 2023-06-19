@@ -79,6 +79,30 @@ public class AulaService {
 		}).collect(Collectors.toList());
 	}
 	
+	public List<AulaDto> listarAulasEmRevisao() {
+		List<Aula> aulas = aulaRepository.findAll();
+		List<Aula> aulasEmRevisao = new ArrayList<>();
+		for(Aula a : aulas) {
+			if(a.getStatus().equals(StatusAulaEnum.REVISAO)) {
+				aulasEmRevisao.add(a);
+			}  
+		}
+		System.out.println("TAMANHO DA LISTA: " + aulasEmRevisao.size());
+		return aulasEmRevisao.stream().map(a -> {
+			AulaDto aulaDto = new AulaDto();
+			aulaDto.setId(a.getId());
+			aulaDto.setDescricao(a.getDescricao());
+			aulaDto.setNomePregao(a.getPregao().getNome());
+			aulaDto.setDataUtilizacao(a.getDataUtilizacao());
+			aulaDto.setValor(a.getValor());
+			aulaDto.setNomeDisciplina(a.getDisciplina().getNome());
+			aulaDto.setNomeLaboratorio(a.getLaboratorio().getNome());
+			aulaDto.setNomeUsuario(a.getUsuario().getFullName());
+			aulaDto.setStatus(a.getStatus().toString());
+			return aulaDto;
+		}).collect(Collectors.toList());
+	}
+	
 	public List<Aula> listarAulasPorPeriodo(LocalDate dataInicial, LocalDate dataFinal) {
 		List<Aula> aulasPorPeriodo = aulaRepository.buscarPorPeriodo(dataInicial, dataFinal);
 		List<Aula> aulasPorPeriodoAprovadas = new ArrayList<>();
