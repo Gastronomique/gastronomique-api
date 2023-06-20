@@ -1,11 +1,15 @@
 package com.ifpr.gastronomique.api.controllers;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,4 +36,10 @@ public class ListaDeCompraController {
 		System.out.println("SALVOU UMA NOVA LISTA DE COMPRA...");
 		return service.salvarListaDeCompra(listaDeAulasId);
 	}
+	
+	@GetMapping("/pdf/{idListaDeCompra}")
+    public void gerarPdfListaDeCompra(HttpServletResponse response, @PathVariable Long idListaDeCompra) throws IOException {
+        this.service.gerarPdfListaDeCompra(response, idListaDeCompra);
+    }
+	
 }

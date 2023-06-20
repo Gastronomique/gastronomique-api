@@ -16,4 +16,6 @@ public interface AulaRepository extends JpaRepository<Aula, Long> {
 	@Query("SELECT a FROM aula a WHERE  a.dataUtilizacao BETWEEN :dataInicial AND :dataFinal")
 	List<Aula> buscarPorPeriodo(LocalDate dataInicial, LocalDate dataFinal);
 	
+	@Query("SELECT a FROM aula a WHERE  a.listaDeCompra.id = :listaDeCompraId")
+	List<Aula> buscarAulasPorListaDeCompraId(Long listaDeCompraId);
 }
