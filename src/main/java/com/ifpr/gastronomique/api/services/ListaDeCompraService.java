@@ -22,7 +22,11 @@ import com.ifpr.gastronomique.api.repositories.AulaRepository;
 import com.ifpr.gastronomique.api.repositories.InsumoRepository;
 import com.ifpr.gastronomique.api.repositories.ItemListaDeCompraRepository;
 import com.ifpr.gastronomique.api.repositories.ListaDeCompraRepository;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -110,52 +114,84 @@ public class ListaDeCompraService {
 		List<Aula> listaDeAulas = aulaRepository.buscarAulasPorListaDeCompraId(listaDeCompra.getId());
 		
 		// Configuração do cabeçalho da resposta
+		String nomeArquivo = listaDeCompra.getDataCriacao().toString();
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\"example.pdf\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + nomeArquivo + ".pdf\"");
         
         // Criação do documento PDF
         Document document = new Document();
         
         try {
-            PdfWriter.getInstance(document, response.getOutputStream());
+        	PdfWriter.getInstance(document, response.getOutputStream());
             document.open();
+            
+            String caminhoImagem = "src/main/resources/images/ifpr.png";
+            Image logoIfpr = Image.getInstance(caminhoImagem);
+            logoIfpr.setAbsolutePosition(0, 770); 
+            logoIfpr.scaleAbsoluteHeight(60);
+            logoIfpr.scaleAbsoluteWidth(60);
+            
+            BaseColor corCabecalhosColunas = new BaseColor(47, 158, 64);
+            BaseColor corConteudoTabela = new BaseColor(238,238,238);
 
-            // Adiciona conteúdo ao documento
+            // Criando os cabeçalhos
             DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            
             PdfPTable tabela = new PdfPTable(3);
-            PdfPCell cabecalho = new PdfPCell(new Paragraph("DATA: " + listaDeCompra.getDataCriacao().format(formatoData)));
+            PdfPCell cabecalho = new PdfPCell(new Paragraph(""));
+            Font fonteNegrito = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
+            cabecalho.setPhrase(new Paragraph("Data da lista: " + listaDeCompra.getDataCriacao().format(formatoData), fonteNegrito));
             cabecalho.setColspan(3);
+            cabecalho.setBackgroundColor(corCabecalhosColunas);
+            cabecalho.setHorizontalAlignment(Element.ALIGN_CENTER);
             tabela.addCell(cabecalho);
-            
-            PdfPCell aulasUtilizadasPdf = new PdfPCell(new Paragraph("Aulas Utilizadas: "));
+            PdfPCell aulasUtilizadasPdf = new PdfPCell(new Paragraph(""));
+            aulasUtilizadasPdf.setPhrase(new Paragraph("Aulas que solicitaram os insumos:", fonteNegrito));
             aulasUtilizadasPdf.setColspan(3);
+            aulasUtilizadasPdf.setBackgroundColor(corCabecalhosColunas);
+            aulasUtilizadasPdf.setHorizontalAlignment(Element.ALIGN_CENTER);
             tabela.addCell(aulasUtilizadasPdf);
+            
+            Font fonte = new Font(Font.FontFamily.HELVETICA, 9);
             String aulas = "";
             for(Aula a : listaDeAulas) {
-            	if(aulas.isEmpty())
+            	if(aulas.isEmpty()) {
             		aulas += a.getDescricao();
-            	else
+            	} else {
             		aulas +=  ", "  + a.getDescricao();
+            	}	
             }
-            PdfPCell celulaAula = new PdfPCell(new Phrase(aulas));
+            
+            PdfPCell celulaAula = new PdfPCell(new Phrase(aulas, fonte));
             celulaAula.setColspan(3);
+            celulaAula.setBackgroundColor(corConteudoTabela);
             tabela.addCell(celulaAula);
             
-			PdfPCell col1 = new PdfPCell(new Paragraph("Nome Do Insumo"));
-			PdfPCell col2 = new PdfPCell(new Paragraph("Unidade De Medida"));
-			PdfPCell col3 = new PdfPCell(new Paragraph("Quantidade"));
-            tabela.addCell(col1);
+			PdfPCell col1 = new PdfPCell(new Paragraph("Nome do insumo", fonteNegrito));
+			col1.setHorizontalAlignment(Element.ALIGN_CENTER);
+			col1.setBackgroundColor(corCabecalhosColunas);
+			PdfPCell col2 = new PdfPCell(new Paragraph("Unidade de medida", fonteNegrito));
+			col2.setHorizontalAlignment(Element.ALIGN_CENTER);
+			col2.setBackgroundColor(corCabecalhosColunas);
+			PdfPCell col3 = new PdfPCell(new Paragraph("Quantidade", fonteNegrito));
+			col3.setHorizontalAlignment(Element.ALIGN_CENTER);
+			col3.setBackgroundColor(corCabecalhosColunas);
+			tabela.addCell(col1);
             tabela.addCell(col2);
             tabela.addCell(col3);
-			
+            
             for(ItemListaDeCompra item : listaDeCompra.getItensDaListaDeCompra()) {
-            	tabela.addCell(item.getInsumo().getDenominacao());
-            	tabela.addCell(item.getInsumo().getUnidadeDeMedida().toString());
-            	tabela.addCell(item.getQuantidade().toString());
+            	PdfPCell nomeInsumo = new PdfPCell(new Paragraph(item.getInsumo().getDenominacao(), fonte));
+            	nomeInsumo.setBackgroundColor(corConteudoTabela);
+            	tabela.addCell(nomeInsumo);
+            	PdfPCell unidadeDeMedida = new PdfPCell(new Paragraph(item.getInsumo().getUnidadeDeMedida().toString(), fonte));
+            	unidadeDeMedida.setBackgroundColor(corConteudoTabela);
+            	tabela.addCell(unidadeDeMedida);
+            	PdfPCell quantidade = new PdfPCell(new Paragraph(item.getQuantidade().toString(), fonte));
+            	quantidade.setBackgroundColor(corConteudoTabela);
+            	tabela.addCell(quantidade);
             }
             
-            
+            document.add(logoIfpr);
             document.add(tabela);
             document.close();
             
