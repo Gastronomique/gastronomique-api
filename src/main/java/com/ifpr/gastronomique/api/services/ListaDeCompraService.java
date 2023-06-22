@@ -1,6 +1,7 @@
 package com.ifpr.gastronomique.api.services;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -88,9 +89,11 @@ public class ListaDeCompraService {
 		    	itemListaDeCompra = new ItemListaDeCompra();
 			    itemListaDeCompra.setInsumo(item.getInsumo());
 			    itemListaDeCompra.setQuantidade(item.getQuantidade());
+			    itemListaDeCompra.setValor(item.getValorTotal());
 			    itemListaDeCompra.setListaDeCompra(listaDeCompra);
 			    listaDeCompra.addItensDaListaDeCompra(itemListaDeCompra);
 	    	} else {
+	    		itemListaDeCompra.setValor(itemListaDeCompra.getValor() + item.getValorTotal());
 	    		itemListaDeCompra.setQuantidade(itemListaDeCompra.getQuantidade() + item.getQuantidade());
 	    }	}    
 	    
@@ -136,67 +139,110 @@ public class ListaDeCompraService {
 
             // Criando os cabeçalhos
             DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            PdfPTable tabela = new PdfPTable(3);
+            PdfPTable tabela = new PdfPTable(4);
             PdfPCell cabecalho = new PdfPCell(new Paragraph(""));
             Font fonteNegrito = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
             cabecalho.setPhrase(new Paragraph("Data da lista: " + listaDeCompra.getDataCriacao().format(formatoData), fonteNegrito));
-            cabecalho.setColspan(3);
+            cabecalho.setColspan(4);
             cabecalho.setBackgroundColor(corCabecalhosColunas);
             cabecalho.setHorizontalAlignment(Element.ALIGN_CENTER);
             tabela.addCell(cabecalho);
+            
+            // Criando Aulas
             PdfPCell aulasUtilizadasPdf = new PdfPCell(new Paragraph(""));
-            aulasUtilizadasPdf.setPhrase(new Paragraph("Aulas que solicitaram os insumos:", fonteNegrito));
-            aulasUtilizadasPdf.setColspan(3);
+            aulasUtilizadasPdf.setPhrase(new Paragraph("Aulas que solicitaram os insumos", fonteNegrito));
+            aulasUtilizadasPdf.setColspan(4);
             aulasUtilizadasPdf.setBackgroundColor(corCabecalhosColunas);
             aulasUtilizadasPdf.setHorizontalAlignment(Element.ALIGN_CENTER);
             tabela.addCell(aulasUtilizadasPdf);
             
+            //Mostrando data e nome das aulas
             Font fonte = new Font(Font.FontFamily.HELVETICA, 9);
-            String aulas = "";
-            for(Aula a : listaDeAulas) {
-            	if(aulas.isEmpty()) {
-            		aulas += a.getDescricao();
-            	} else {
-            		aulas +=  ", "  + a.getDescricao();
-            	}	
+            for(Aula aula : listaDeAulas) {
+            	PdfPCell celulaAulaData = new PdfPCell(new Phrase(aula.getDataUtilizacao().format(formatoData), fonte));
+                celulaAulaData.setColspan(1);
+                celulaAulaData.setHorizontalAlignment(Element.ALIGN_CENTER);
+            	celulaAulaData.setBackgroundColor(corConteudoTabela);
+                tabela.addCell(celulaAulaData);
+                
+                PdfPCell celulaAulaDescricao = new PdfPCell(new Phrase(aula.getDescricao(), fonte));
+                celulaAulaDescricao.setColspan(3);
+                celulaAulaDescricao.setHorizontalAlignment(Element.ALIGN_CENTER);
+                celulaAulaDescricao.setBackgroundColor(corConteudoTabela);
+                tabela.addCell(celulaAulaDescricao);
             }
-            
-            PdfPCell celulaAula = new PdfPCell(new Phrase(aulas, fonte));
-            celulaAula.setColspan(3);
-            celulaAula.setBackgroundColor(corConteudoTabela);
-            tabela.addCell(celulaAula);
             
 			PdfPCell col1 = new PdfPCell(new Paragraph("Nome do insumo", fonteNegrito));
 			col1.setHorizontalAlignment(Element.ALIGN_CENTER);
 			col1.setBackgroundColor(corCabecalhosColunas);
+			
 			PdfPCell col2 = new PdfPCell(new Paragraph("Unidade de medida", fonteNegrito));
 			col2.setHorizontalAlignment(Element.ALIGN_CENTER);
 			col2.setBackgroundColor(corCabecalhosColunas);
+			
 			PdfPCell col3 = new PdfPCell(new Paragraph("Quantidade", fonteNegrito));
 			col3.setHorizontalAlignment(Element.ALIGN_CENTER);
 			col3.setBackgroundColor(corCabecalhosColunas);
+			
+			PdfPCell col4 = new PdfPCell(new Paragraph("Valor", fonteNegrito));
+			col4.setHorizontalAlignment(Element.ALIGN_CENTER);
+			col4.setBackgroundColor(corCabecalhosColunas);
+			
 			tabela.addCell(col1);
             tabela.addCell(col2);
             tabela.addCell(col3);
+            tabela.addCell(col4);
             
+            // Lista de Insumos
+            Double valorTotalDosInsumosDaLista = 0.0;
             for(ItemListaDeCompra item : listaDeCompra.getItensDaListaDeCompra()) {
+            	
+            	valorTotalDosInsumosDaLista += item.getValor();
+            	
             	PdfPCell nomeInsumo = new PdfPCell(new Paragraph(item.getInsumo().getDenominacao(), fonte));
+            	nomeInsumo.setHorizontalAlignment(Element.ALIGN_CENTER);
             	nomeInsumo.setBackgroundColor(corConteudoTabela);
             	tabela.addCell(nomeInsumo);
+            	
             	PdfPCell unidadeDeMedida = new PdfPCell(new Paragraph(item.getInsumo().getUnidadeDeMedida().toString(), fonte));
+            	unidadeDeMedida.setHorizontalAlignment(Element.ALIGN_CENTER);
             	unidadeDeMedida.setBackgroundColor(corConteudoTabela);
             	tabela.addCell(unidadeDeMedida);
-            	PdfPCell quantidade = new PdfPCell(new Paragraph(item.getQuantidade().toString(), fonte));
+            	
+            	String quantidadeStr = new DecimalFormat("0.000").format(item.getQuantidade());
+            	PdfPCell quantidade = new PdfPCell(new Paragraph(quantidadeStr.replace(".", ","), fonte));
+            	quantidade.setHorizontalAlignment(Element.ALIGN_CENTER);
             	quantidade.setBackgroundColor(corConteudoTabela);
             	tabela.addCell(quantidade);
+            	
+            	DecimalFormat formatoValor = new DecimalFormat("R$ 0.00");
+            	String valorFormatado = formatoValor.format(item.getValor());
+            	PdfPCell valorCell = new PdfPCell(new Paragraph(valorFormatado, fonte));
+            	valorCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            	valorCell.setBackgroundColor(corConteudoTabela);
+            	tabela.addCell(valorCell);
             }
+            
+            PdfPCell valorTotalInsumos = new PdfPCell(new Paragraph(""));
+            valorTotalInsumos.setPhrase(new Paragraph("Valor total dos insumos solicitados", fonteNegrito));
+            valorTotalInsumos.setColspan(4);
+            valorTotalInsumos.setBackgroundColor(corCabecalhosColunas);
+            valorTotalInsumos.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tabela.addCell(valorTotalInsumos);
+            
+            DecimalFormat formatoValor = new DecimalFormat("R$ 0.00");
+        	String valorFormatado = formatoValor.format(valorTotalDosInsumosDaLista);
+        	PdfPCell valorTotalCell = new PdfPCell(new Paragraph(valorFormatado, fonteNegrito));
+        	valorTotalCell.setColspan(4);
+        	valorTotalCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        	valorTotalCell.setBackgroundColor(corConteudoTabela);
+        	tabela.addCell(valorTotalCell);
             
             document.add(logoIfpr);
             document.add(tabela);
             document.close();
             
         } catch (Exception e) {
-            // Trate exceções conforme necessário
             e.printStackTrace();
         }
     }

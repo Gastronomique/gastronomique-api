@@ -32,4 +32,6 @@ public class ItemListaDeCompra {
 	
 	private Double quantidade;
 	
+	private Double valor;
+	
 }
