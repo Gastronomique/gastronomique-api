@@ -5,6 +5,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,6 +32,11 @@ public class InsumoController {
 	@GetMapping
 	public List<Insumo> buscarTodos() {
 		return service.listarTodosInsumos();
+	}
+	
+	@GetMapping("pageable")
+	public Page<Insumo> buscarTodosInsumosPageable(Pageable pageable) {
+		return service.listarTodosInsumosPageable(pageable);
 	}
 	
 	@GetMapping("pregao/{idPregao}")

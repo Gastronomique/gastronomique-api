@@ -58,6 +58,16 @@ public class AdminService {
 		return new ResponseEntity<User>(usuario, HttpStatus.OK);
 	}
 	
+	public ResponseEntity<User> retirarPermissaoUsuarioAdmin(Long userId) {
+		var usuario = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException(userId, "User"));
+		Set<Role> roles = new HashSet<>();
+		Role professorRole = roleRepository.findByName(ERole.ROLE_PROFESSOR).orElseThrow(null);
+		roles.add(professorRole);
+		usuario.setRoles(roles);
+		userRepository.save(usuario);
+		return new ResponseEntity<User>(usuario, HttpStatus.OK);
+	}
+	
 	public ResponseEntity<Aula> aprovarAula(Long id) {
 		Aula aula = aulaRepository.findById(id).orElse(null);
 		if(aula != null) {
@@ -66,6 +76,16 @@ public class AdminService {
 			return new ResponseEntity<Aula>(aula, HttpStatus.OK);
 		}	
 		return new ResponseEntity<Aula>(aula, HttpStatus.NOT_FOUND);
- }
+	}
+	
+	public ResponseEntity<Aula> devolverAula(Long id) {
+		Aula aula = aulaRepository.findById(id).orElse(null);
+		if(aula != null) {
+			aula.setStatus(StatusAulaEnum.EDICAO);
+			aulaRepository.save(aula);
+			return new ResponseEntity<Aula>(aula, HttpStatus.OK);
+		}	
+		return new ResponseEntity<Aula>(aula, HttpStatus.NOT_FOUND);
+	}
 
 }

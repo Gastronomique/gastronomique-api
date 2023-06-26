@@ -47,8 +47,18 @@ public class AdminController {
 		return adminService.tornarUsuarioAdmin(userId);
 	}
 	
+	@PutMapping("retirar/administrador/{userId}")
+	public ResponseEntity<User> retirarPermissaoUsuarioAdmin(@PathVariable Long userId) {
+		return adminService.retirarPermissaoUsuarioAdmin(userId);
+	}
+	
 	@PutMapping("/aula/aprovar/{id}")
 	public ResponseEntity<Aula> aprovarAula(@PathVariable Long id) {
 		return adminService.aprovarAula(id);
+	}
+	
+	@PutMapping("/aula/devolver/{id}")
+	public ResponseEntity<Aula> devolverAula(@PathVariable Long id) {
+		return adminService.devolverAula(id);
 	}
 }

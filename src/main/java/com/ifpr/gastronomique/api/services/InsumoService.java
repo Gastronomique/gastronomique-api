@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,10 @@ public class InsumoService {
 	
 	public List<Insumo> listarTodosInsumos() {
 		return repository.findAll();
+	}
+	
+	public Page<Insumo> listarTodosInsumosPageable(Pageable pageable) {
+		return repository.findAll(pageable);
 	}
 	
 	public List<Insumo> buscarInsumosPorPregao(Long idPregao) {
