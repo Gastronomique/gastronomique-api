@@ -7,6 +7,7 @@ import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ifpr.gastronomique.api.enums.StatusAulaEnum;
@@ -88,4 +89,11 @@ public class AdminService {
 		return new ResponseEntity<Aula>(aula, HttpStatus.NOT_FOUND);
 	}
 
+	public ResponseEntity<User> resetarSenhaUsuario(Long userId) {
+		var usuario = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException(userId, "User"));
+		usuario.setPassword(new BCryptPasswordEncoder().encode("gastronomique123"));
+		userRepository.save(usuario);
+		return new ResponseEntity<User>(usuario, HttpStatus.OK);
+	}
+	
 }

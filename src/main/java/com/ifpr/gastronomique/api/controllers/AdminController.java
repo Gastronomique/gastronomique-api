@@ -61,4 +61,9 @@ public class AdminController {
 	public ResponseEntity<Aula> devolverAula(@PathVariable Long id) {
 		return adminService.devolverAula(id);
 	}
+	
+	@PutMapping("/resetar/senha/{userId}")
+	public ResponseEntity<User> resetarSenhaUsuario(@PathVariable Long userId) {
+		return adminService.resetarSenhaUsuario(userId);
+	}
 }
